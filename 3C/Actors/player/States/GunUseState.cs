@@ -11,7 +11,6 @@ namespace _3C.Actors.player.States
         {
             //null
         }
-
         public override void Enter()
         {
             base.Enter();
@@ -22,7 +21,6 @@ namespace _3C.Actors.player.States
             base.Exit();
             if (Player.Weapon != null) Player.Weapon.StopUse();
         }
-
         public override void OnRecycle()
         {
             Player.View.StopAniMation(Player.Aim);

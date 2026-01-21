@@ -15,6 +15,6 @@ namespace Items
             this.stat = stat;
             this.actor = actor;
         }
-        public void Init(EquipmentInfo info, Actor actor) => Init(info.GetNewItemStat() as EquipmentStat,actor);
+        public virtual void Init(EquipmentInfo info, Actor actor) => Init(info.GetNewItemStat() as EquipmentStat,actor);
     }
 }

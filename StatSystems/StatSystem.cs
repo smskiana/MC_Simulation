@@ -40,6 +40,7 @@ namespace StatSystems {
         public void TriggerMaxHpChange(float oldvalue, float newValue) => MaxHpChange?.Invoke(this, oldvalue, newValue); 
         public void TriggerEffectExcuteInMe(Effect effect) => EffectExcuteInMe?.Invoke(this, effect); 
         public void TriggerCurHpChange(float oldvalue, float newValue) => CurHpChange?.Invoke(this, oldvalue, newValue); 
+        public void TriggerHpEqZero() => CurEqZero?.Invoke(this);
         public void ResetToBasicStat(ActorStat stat)
         {
             stat?.Reset(container.Stat);

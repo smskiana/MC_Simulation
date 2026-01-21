@@ -92,6 +92,7 @@ namespace _3C.Actors.Monsters
             AddEvent(Idle, () => DistanceToTarget() > findDistance && CheckGround());
             AddEvent(follow,() => DistanceToTarget() <= findDistance&& DistanceToTarget()>StopForAttackDistance && CheckGround());
             AddEvent(attack, () => DistanceToTarget() <= StopForAttackDistance);
+            base.Stat.CurEqZero += (a) => KillSelf();
         }
         public bool FarAway()
         {
@@ -135,5 +136,6 @@ namespace _3C.Actors.Monsters
         }
         [Button("自杀")]
         public void KillSelf() => MonsterManager.Instance.RycycleMonster(this);
+
     }
 }

@@ -4,8 +4,8 @@ namespace StatSystems.Store.Items
     public class EquipmentInfo : ItemInfo
     {
         [SerializeField] private float maxDurability;
-        [SerializeField] private float canAbrasion;
+        [SerializeField] private bool canAbrasion;
         public float MaxDurability { get => maxDurability;}
-        public float CanAbrasion { get => canAbrasion;}
+        public bool CanAbrasion { get => canAbrasion;}
     }
 }

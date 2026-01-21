@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using StatSystems.Stats.Items;
 using UnityEngine.InputSystem;
 using Items;
+using System;
 namespace _3C.Actors.player
 {
     public interface IHandUseBottonDown
@@ -23,6 +24,14 @@ namespace _3C.Actors.player
     public interface IHandAimBottonDown 
     {
         public abstract void HandAimBottonDown();
+    }
+    public interface IHandLoadBottonDown 
+    {
+        public abstract void HandLoadBottonDown();
+    }
+    public interface IHandLoadBottonUp
+    {
+        public void HandLoadBottonUp();
     }
 
     public class Player : Actor
@@ -51,6 +60,7 @@ namespace _3C.Actors.player
         [SerializeField]
         private string aim = "Aim";
         private ItemStat laststat = null;
+        public event Action<Weapon> OnHoldWeaponChanged;
         [SerializeField] private Weapon weapon = null;
         [ShowInInspector] public PlayerView PlayerView { get => base.View as PlayerView; }
         [ShowInInspector] public Vector3Int BodyForwardInt => Tool.GetForWorldInt(DefaultIdolPos);
@@ -94,6 +104,14 @@ namespace _3C.Actors.player
                 actions["Jump"].performed += ctx => DefaultMachine.NextState = jumpStateName;
                 actions["Aim"].performed += ctx => { if (ArmMachine.Current is IHandAimBottonDown hand) hand.HandAimBottonDown(); };
                 actions["Aim"].canceled += ctx => { if (ArmMachine.Current is IHandAimBottonUp hand) hand.HandAimBottonUp(); };
+                actions["Load"].performed += ctx => 
+                { 
+                    (ArmMachine.Current as IHandLoadBottonDown)?.HandLoadBottonDown(); 
+                };
+                actions["Load"].canceled += ctx =>
+                {
+                    (ArmMachine.Current as IHandLoadBottonUp)?.HandLoadBottonUp(); 
+                };
                 if (playerBag != null)
                 {
                     playerBag.HotItemChanged += (sender) =>
@@ -142,12 +160,11 @@ namespace _3C.Actors.player
             }
             return null;
         }
-
-
         public void HoldItem(Transform transform)
         {
             transform.TryGetComponent<Weapon>(out weapon);
             PlayerView.Hold(transform);
+            OnHoldWeaponChanged?.Invoke(weapon);
         }
     }
 

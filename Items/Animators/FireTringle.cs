@@ -4,8 +4,7 @@ namespace AnimatorControl
 {
     public class WeaponAnimator : MonoBehaviour
     {
-        public Actor charactor;
-       
+        public Actor charactor;      
         public void OnEnable()
         {
             charactor = GetComponentInParent<Actor>();

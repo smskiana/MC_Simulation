@@ -52,6 +52,7 @@ namespace StatSystems
         public virtual void SetBasicChange(ActorStat stat)
         {
             Stat.Reset(stat);
+            if (Stat.currentHp <= 0) StatSystem.TriggerHpEqZero();
         }
         public DamagePackage GetDamage()
         {

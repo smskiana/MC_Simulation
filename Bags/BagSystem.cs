@@ -5,6 +5,7 @@ using StatSystems.Store.Items;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class BagSystem : MonoBehaviour
 {
@@ -520,6 +521,7 @@ public class BagSystem : MonoBehaviour
         rest = remaining;
         return remaining<=0;
     }   
+
     public bool TryTakeAny(int Sourceid,int count,out List<(ItemStat item,int count)> result)
     {
         result = new();
@@ -537,6 +539,35 @@ public class BagSystem : MonoBehaviour
                 result.Add((item, buf));
             else
                 result.Add((item.CloneNewInstance() as ItemStat,buf));
+        }
+        return remaining <= 0;
+    }
+    public bool TryTakeAny(ItemInfo info, int count,out List<(ItemStat item, int count)> result) =>
+                TryTakeAnyStrict(info.ID, count, out result);
+    public bool TryTakeAny(int sourceId, int count, out int rest)
+    {
+        rest = count;
+        if (sourceId == 0 || count <= 0) return false;
+        int remaining = count;
+        for (int i = 0; i < size && remaining > 0; i++)
+        {
+            var slot = bagItems[i];
+            if (slot.IsEmpty() || !slot.Equals(sourceId)) continue;
+            slot.Take(remaining, out remaining);
+        }
+        rest = remaining;
+        return remaining <= 0;
+    }
+    public bool TryTakeAny(ItemInfo info, int count, out int rest) => TryTakeAny(info.ID, count, out rest);
+    public bool TryTakeAny(int Sourceid,int count)
+    {
+        if (Sourceid == 0 || count <= 0) return false;
+        int remaining = count;
+        for (int i = 0; i < size && remaining > 0; i++)
+        {
+            var slot = bagItems[i];
+            if (slot.IsEmpty() || !slot.Equals(Sourceid)) continue;
+            slot.Take(remaining, out remaining);
         }
         return remaining <= 0;
     }
@@ -574,6 +605,36 @@ public class BagSystem : MonoBehaviour
         }
         return true;
     }
+    public bool TryTakeAnyStrict(ItemInfo info, int count, out List<(ItemStat item, int count)> result) =>TryTakeAnyStrict(info.ID,count,out result);
+    public bool TryTakeAnyStrict(int Sourceid, int count)
+    {
+        if (Sourceid == 0 || count <= 0) return false;
+
+        int total = 0;
+        for (int i = 0; i < size; i++)
+        {
+            var slot = bagItems[i];
+            if (!slot.IsEmpty() && slot.Equals(Sourceid))
+                total += slot.Count;
+
+            if (total >= count)
+                break;
+        }
+        // 不够直接失败
+        if (total < count)
+            return false;
+        // 开始真正取
+        int remaining = count;
+        for (int i = 0; i < size && remaining > 0; i++)
+        {
+            var slot = bagItems[i];
+            if (slot.IsEmpty() || !slot.Equals(Sourceid)) continue;
+            slot.Take(remaining, out remaining);
+        }
+        return true;
+    }
+    public void TryTakeAnyStrict(ItemInfo info,int count) => TryTakeAnyStrict(info.ID, count);
+
     protected int AddAt(int index, ItemStat item,int count)
     {
         if (item == null || count <= 0) return -1;
@@ -689,6 +750,14 @@ public class BagSystem : MonoBehaviour
             x.Equals(item));
         return index >= 0;
     }
+    public bool Contain(int SourceID)
+    {
+        int index = bagItems.FindIndex(x =>
+            !x.IsEmpty() &&
+            x.Equals(SourceID));
+        return index >= 0;
+    }
+    public bool Contain(ItemInfo info)=>Contain(info.ID);
 
 #if UNITY_EDITOR
     public void SwitchLayerMask(int layer)

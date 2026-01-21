@@ -4,7 +4,6 @@ namespace Items
 {
     public class Weapon :Equipment
     {
-        public const string Id = "IWEP"; 
         [SerializeField]private Transform idol;
         public Transform Idol { get { return idol; } private set=>idol=value; }
         public virtual void Use()

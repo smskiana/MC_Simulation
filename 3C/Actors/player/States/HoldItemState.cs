@@ -11,6 +11,7 @@ namespace _3C.Actors.player.States
         [ShowInInspector] protected bool CheckSomething;
         [ShowInInspector] protected Vector3Int pos;
         [SerializeField] bool ShowPos=true;
+        private ItemStat stat = null;
         protected override void InitInfo()
         {
             base.orgin = "Null";
@@ -21,14 +22,19 @@ namespace _3C.Actors.player.States
         }
         public override void Enter()
         {
-            ItemStat stat;
+            ShowItem();
+            if (!ShowPos) Player.PlayerView.HidePlaceCube();
+        }
+        private void ShowItem()
+        {
+            if(stat!=null&&stat.Equals(Player.Laststat)) return;
             if ((stat = Player.Laststat) != null)
             {
                 var info = stat.ItemInfo;
                 var ob = Object.Instantiate(info.Idol);
-                if(ob.TryGetComponent<Weapon>(out var component))
+                if (ob.TryGetComponent<Weapon>(out var component))
                 {
-                    component.Init(stat as EquipmentStat,Player);
+                    component.Init(stat as EquipmentStat, Player);
                 }
                 Player.HoldItem(ob.transform);
             }
@@ -36,11 +42,9 @@ namespace _3C.Actors.player.States
             {
                 Player.PlayerView.ClearHand();
             }
-            if(!ShowPos) Player.PlayerView.HidePlaceCube();
         }
         public override void Update()
         {
-            base.Update();
             CheckBlock();
         }
         private bool CheckBlock()

@@ -8,11 +8,12 @@ namespace StatSystems.Store.Items
         [SerializeField] private int anmoContain;
         [SerializeField] private AnmoInfo useAnmo;
         [SerializeField] private float fireSpeed = 4;
-        [SerializeField] private bool needAnmo = false;
+        [SerializeField] private bool needAnmo = true;
 
         public int AnmoContain { get => anmoContain;}
         public AnmoInfo UseAnmo { get => useAnmo;}
         public float FireSpeed { get => fireSpeed;}
+        public bool NeedAnmo { get => needAnmo;}
 
         public override ItemStat GetNewItemStat() => new GunStat(this);    
     }

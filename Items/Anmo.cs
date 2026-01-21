@@ -10,7 +10,7 @@ public class Anmo :MonoBehaviour,IDamageSource
     public bool Firing;
     [SerializeField] private LayerMask ActorMask;
     [SerializeField] private LayerMask GroundMask;
-    private void Update()
+    private void Update() 
     {
         if (!Firing) return;
         timer += Time.deltaTime;

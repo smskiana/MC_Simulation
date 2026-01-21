@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using StatSystems.Store.Items;
+using UnityEngine;
 namespace StatSystems.Stats.Items
 {  
     [System.Serializable]
@@ -20,9 +22,13 @@ namespace StatSystems.Stats.Items
         {
            return this;
         }
-        public bool Equals(ItemStat other)
+        public virtual bool Equals(ItemStat other)
         {
-            if (ItemInfo == null) throw new ArgumentNullException(nameof(ItemInfo));
+            if (ItemInfo == null)
+            {
+                UnityEngine.Debug.LogError("不应该存在info为null的Stat");
+                return false;
+            }
             if (other == null) return false;
             return ItemInfo.Equals(other.ItemInfo);
         }

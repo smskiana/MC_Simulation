@@ -1,8 +1,10 @@
 ﻿using _3C.Actors.player;
 using Bags;
 using Bags.UI;
+using Items;
 using Manager;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 namespace MyGUI
@@ -20,6 +22,10 @@ namespace MyGUI
         [SerializeField] private Chose chose;
         [LabelText("玩家血条")]
         [SerializeField] private Slider slider;
+        [LabelText("枪械容量")]
+        [SerializeField] TextMeshProUGUI contain;
+        [LabelText("枪械余量")]
+        [SerializeField] TextMeshProUGUI rest;
         
         public void BlindPlayer(Player player)
         {
@@ -37,6 +43,7 @@ namespace MyGUI
             slider.maxValue = player.Stat.MaxHp;
             slider.value = player.Stat.Hp;
 
+
             player.Stat.CurHpChange += (_,_, value) => {
                 slider.value = value;          
             };
@@ -44,7 +51,7 @@ namespace MyGUI
             {
                 slider.maxValue = maxValue;
             };
-
+            player.OnHoldWeaponChanged += HandHoldWeaponChanged;
 
             playerInput.FindAction("Bag").performed += ctx =>
             {
@@ -56,6 +63,22 @@ namespace MyGUI
             };
 
         }
+
+        public void HandHoldWeaponChanged(Weapon weapon)
+        {
+            if(weapon is Gun gun)
+            {
+                contain.SetText(gun.MaxAnmo.ToString());
+                rest.SetText(gun.RestAnmoCount.ToString());
+                gun.OnRestAnmoCountChanged += HandRestAnmoChanged;
+            }
+        }
+
+        public void HandRestAnmoChanged(int rest)
+        {
+            this.rest.SetText(rest.ToString());
+        }
+
         public bool AnyUIActive => PlayerBagUI.gameObject.activeSelf;
         public void CloseAll() => PlayerBagUI.gameObject.SetActive(false);
         protected override void SingletonAwake()
