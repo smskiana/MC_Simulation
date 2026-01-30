@@ -28,13 +28,11 @@ namespace _3C
         [ShowInInspector]
         [ReadOnly]
         private  HashSet<string> defaultSwitch;
-#if UNITY_EDITOR
         public IEnumerable<string> SerializableNextState { get => serializableNextState;  }
         public IEnumerable<string> SerializableInterrupt { get => serializableInterrupt; }
         public IEnumerable<string> SerializableDefaultSwitch { get => serializableDefaultSwitch; }
         public string ID { get => id;}
         public string Orgin { get => orgin;}
-#endif
         public event Action<State> OnEnter;
         public event Action<State> OnExit;
         public event Action<State> OnPause;
