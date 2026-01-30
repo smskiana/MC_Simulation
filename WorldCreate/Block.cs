@@ -13,7 +13,6 @@ namespace WorldCreatation {
     
     public class Block
     {
-   
         private readonly int[] faceTable = new int[6] {-1,-1,-1,-1,-1,-1};
         private readonly bool[] facebool = new bool[6] {false,false,false,false,false,false };
         private readonly int[] mapping = new int[6] { 0, 1, 2, 3, 4, 5 };  
@@ -114,13 +113,11 @@ namespace WorldCreatation {
                 return -1; // 无效方向
             }
         } 
-
         private void ResetMapping()
         {
             for (int i = 0; i < 6; i++)
                 mapping[i] = i;
-        }
-       
+        }    
         public Vector2[] GetUvs(int face)
         {
             return VoxelData.SetUvPos(mapping[face]);
@@ -135,10 +132,7 @@ namespace WorldCreatation {
 
         public static  BlockFactory GetInstance()
         {
-            if(instance==null)
-            {
-                instance=new BlockFactory();
-            }
+            instance??=new BlockFactory();
             return instance;
         }
         public Block GetBlock(int ID, Vector3Int posInChuck)

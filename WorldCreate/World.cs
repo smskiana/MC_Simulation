@@ -80,7 +80,7 @@ namespace WorldCreatation
             if(playerPos==null) playerPos = Camera.main.transform;
             chuckView = Resources.Load<GameObject>(path).GetComponent<ChunkView>();
             seed = Random.Range(0, 10000);
-            plain = new PlainTerrainGenerator(0.01f, seed);
+            plain = new PlainTerrainGenerator(seed);
            
         }
         private void Start()
@@ -212,9 +212,6 @@ namespace WorldCreatation
                 return values;
             }
         }
-        /// <summary>
-        /// 根据新加入的Chunk索引生成Chunk并加入协程生成队列
-        /// </summary>
         private void AddChucks(List<(int x, int z)> add)
         {
             if (add.Count == 0) return;
@@ -230,9 +227,6 @@ namespace WorldCreatation
             if(chus.Count==0)return;
             StartCoroutine(AddChucksCoroutine(chus));
         }
-        /// <summary>
-        /// 根据索引添加单个Chunk
-        /// </summary>
         private Chuck AddChuck(Vector2Int pos)
         {
      
@@ -258,36 +252,23 @@ namespace WorldCreatation
                 return chuc;
             }
         }
-        /// <summary>
-        /// 隐藏指定Chunk列表
-        /// </summary>
         private void HideChucks(List<(int x, int z)> remove)
         {
             foreach (var v in remove)
                 HideChuck(v);
         }
-        /// <summary>
-        /// 隐藏单个Chunk
-        /// </summary>
         private void HideChuck((int x, int z) v)
         {
             if (chucks.TryGetValue(new(v.x,v.z), out var chu))
                 chu.SetActive(false);
         }
-        /// <summary>
-        /// 尝试通过世界坐标获取Chunk
-        /// </summary>
         private bool TryGetChuck(Vector3 pos, out Chuck chu)
         {
             var (x, z) = GetChuckLoc(pos);
             return chucks.TryGetValue(new(x,z), out chu);
         }
-        /// <summary>获取位置所在的Chunk索引</summary>
-        private (int x, int z) GetChuckLoc(Vector3 pos) =>
-            (Tool.FloorDiv((int)pos.x, Chuck.WIDTH), Tool.FloorDiv((int)pos.z, Chuck.LENGTH));
-        /// <summary>通过Chunk索引获取Chunk世界坐标</summary>
-        private Vector3 GetChuckPos(int x, int z) =>
-            new(x * Chuck.WIDTH, 0, z * Chuck.LENGTH);
+        private (int x, int z) GetChuckLoc(Vector3 pos) => (Tool.FloorDiv(pos.x, Chuck.WIDTH), Tool.FloorDiv(pos.z, Chuck.LENGTH));
+        private Vector3 GetChuckPos(int x, int z) =>  new(x * Chuck.WIDTH, 0, z * Chuck.LENGTH);
 
         #endregion
 
@@ -454,6 +435,7 @@ namespace WorldCreatation
             }
 
         }
+        public bool IsBlockExit(Vector3Int pos) => true;
         #endregion
 
         #region Player 外部查询   

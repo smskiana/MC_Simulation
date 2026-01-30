@@ -7,18 +7,13 @@ using UnityEngine;
 
 public static class Tool
 {
-    public static int FloorDiv(int a, int b)
+    public static int FloorDiv(float a, float b)
     {
-        int q = a / b;
-        if ((a % b) != 0 && ((a < 0) ^ (b < 0)))
-            q--;
-        return q;
+        float q = a / b;
+        return Mathf.FloorToInt(q);
     }
 
-    /// <summary>
-    /// 返回Vector3最大分量所在轴的方向向量（包含正负）
-    /// 例如：v = (-3, 1, 2) -> 返回 Vector3.left
-    /// </summary>
+   
     public static Vector3Int GetMaxAxisVector(Vector3 v)
     {
         float x = v.x;
@@ -98,6 +93,11 @@ public static class Tool
     public static void SwapRemove<T>(this List<T> list, int index)
     {
         int last = list.Count - 1;
+        if (last == index)
+        {
+            list.RemoveAt(last);
+            return;
+        }
         (list[index], list[last]) = (list[last], list[index]);
         list.RemoveAt(last);
     }

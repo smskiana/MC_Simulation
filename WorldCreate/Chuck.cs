@@ -364,7 +364,7 @@ namespace WorldCreatation
             }
             mesh.RecalculateNormals(); // 更新法线
             chunkView.SetMesh(mesh);
-            chunkView.SetMaterial(materials);
+            chunkView.SetMaterials(materials.ToArray());
         }
 
         private void DeleteFace(int vertPos, int triPos, int pos)

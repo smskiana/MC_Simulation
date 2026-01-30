@@ -28,9 +28,7 @@ namespace _3C.Actors.Monsters
                 base.MoveDir = value;
                 MonsterView.SetForward(value);
             } }
-
         public MachineState lastState;
-
         public void Init(Transform target,int ID)
         {
 

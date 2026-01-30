@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 namespace WorldCreatation
 {
+   
+
     public static class VoxelData
     {
+       
         public static readonly Vector3[] idToVec = new Vector3[6]
         {
             Vector3.up,      // 0
@@ -12,6 +15,7 @@ namespace WorldCreatation
             Vector3.forward, // 4
             Vector3.back     // 5
         };
+
         public static readonly Vector3Int[] voxelVerts = new Vector3Int[8]
         {
             Vector3Int.zero,                    //0
@@ -23,6 +27,7 @@ namespace WorldCreatation
             Vector3Int.one,                     //6
             Vector3Int.up+Vector3Int.forward    //7
         };
+
         public static readonly int[,] voxelTris = new int[6, 4]
         {
             {6,2,7,3},//up
@@ -32,7 +37,9 @@ namespace WorldCreatation
             {5,6,4,7},//forward
             {0,3,1,2},//back
         };
+
         public static readonly int[] voxelTriIndex = new int[6]{ 0,1,2,2,1,3 };
+
         public static readonly Vector3Int[] voxelNormals = new Vector3Int[6]
         {
             Vector3Int.up,
@@ -42,6 +49,7 @@ namespace WorldCreatation
             Vector3Int.forward,
             Vector3Int.back,
         };
+
         public static Vector2[][] UvPos = new Vector2[6][]
         {
              new Vector2[]{ -Vector2Int.one, -Vector2Int.one, -Vector2Int.one, -Vector2Int.one },

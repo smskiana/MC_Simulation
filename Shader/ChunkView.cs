@@ -4,23 +4,20 @@ using UnityEngine;
 
 namespace WorldCreatation
 {
+    [RequireComponent(typeof(MeshCollider),typeof(MeshFilter),typeof(MeshRenderer))]
     public class ChunkView:MonoBehaviour
     {
-        private MeshFilter meshFilter;
-        private MeshRenderer  meshRenderer;
-        private MeshCollider meshCollider;
-        public static Transform targetObject;
-        public float rate = .2f;
-
+        public MeshFilter meshFilter;
+        public MeshRenderer  meshRenderer;
+        public MeshCollider meshCollider;
+      
 
         private void Awake()
         {
             meshRenderer = GetComponent<MeshRenderer>();
             meshFilter = GetComponent<MeshFilter>();
             meshCollider = GetComponent<MeshCollider>();
-            //TODO
-            //targetObject = FindFirstObjectByType<player>().transform;
-           // camra = FindFirstObjectByType<Camera>().transform;    
+        
         }
         public void SetMesh(Mesh mesh)
         {
@@ -31,9 +28,13 @@ namespace WorldCreatation
             meshCollider.sharedMesh = meshFilter.sharedMesh;
 
         }
-        public void SetMaterial(List<Material> material)
+        public void SetMaterials(Material[] material)
         {
-           meshRenderer.materials = material.ToArray();
+           meshRenderer.materials = material;
+        }
+        public void SetMaterial(Material material)
+        {
+           meshRenderer.material = material;
         }
 
       
