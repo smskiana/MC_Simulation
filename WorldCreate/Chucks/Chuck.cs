@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using WorldCreatation;
-using WorldCreate.TerrainInfos;
 
 namespace WorldCreate.Chucks
 {
@@ -13,33 +11,33 @@ namespace WorldCreate.Chucks
         HaveInitMesh,
         HaveCreateMesh,
     }
-    public interface IChunkCommunicate
+    public interface IChunksCommunicate
     {
-        public bool IsBlockExit(Vector3Int worldPos);
+        public bool IsBlockExist(Vector3Int worldPos);
         public bool DeleteFace(Vector3Int worldPos,Face face);
         public bool AddFace(Vector3Int worldPos,Face face);
     }
-    public interface IGetBlock
+    public interface IGetBlockType
     {
-        public int GetBlock(Vector3Int worldPos);
+        public int GetBlockType(Vector3Int chuckpos,Vector2Int chuckID);
     }
     public class Chuck
     {
         public Vector2Int pos;
         public  Vector3Int Position { get => new(pos.x * WIDTH, 0, pos.y*LENGTH); }
-        public IChunkCommunicate world; 
+        public IChunksCommunicate world; 
         //==================《区块基本信息》====================
         public const int WIDTH = 32;           
         public const int LENGTH = 32;      
         public ChuckState State {get;private set;} = ChuckState.New;
-        public static int HEIGHT { get => 128; }
+        public static int HEIGHT = 128;
         //=================《动态记录信息》======================
         private readonly List<Block> removeBlockMark = new();
         private readonly List<(Block block, Face face)> pendingRemove = new();
         private readonly List<(Block block, Face face)> pendingAdd = new();
         private readonly BlocksContainer blocksContainer;
         private readonly MeshContainer meshContainer;
-        private readonly ChunkView view;
+        public readonly ChunkView view;
         public Chuck(Vector2Int pos,ChunkView viewObject)
         {
             this.pos = pos;
@@ -49,9 +47,12 @@ namespace WorldCreate.Chucks
             pendingAdd = new();
             pendingRemove = new();
             this.view = viewObject;
+            viewObject.name =nameof(Chuck)+" "+ pos.ToString();
             this.view.transform.localPosition = this.Position;
-        }  
-        public void AddAllBlocks(IGetBlock info)
+        }
+        public static Vector3Int GetWorldPos(Vector3Int chuckpos, Vector2Int chuckID) => new Vector3Int(chuckID.x * WIDTH, 0, chuckID.y * LENGTH) + chuckpos;
+        public static Vector2Int GetChuckId(Vector3Int worldpos) => new(Tool.FloorDiv(worldpos.x, Chuck.WIDTH), Tool.FloorDiv(worldpos.z, Chuck.LENGTH));
+        public void AddAllBlocks(IGetBlockType info)
         {
             if(State!=ChuckState.New)
             {
@@ -66,7 +67,7 @@ namespace WorldCreate.Chucks
                         
                         Vector3Int posInChuck = new(x, y, z);
                         int id;
-                        if((id=info.GetBlock(ToWorldPos(posInChuck))) != 0)
+                        if((id=info.GetBlockType(posInChuck,pos)) != 0)
                         {
                             var block = new Block(posInChuck)
                             {
@@ -114,7 +115,7 @@ namespace WorldCreate.Chucks
         }
         public Vector3Int ToChuckPos(Vector3Int worldpos) => worldpos - Position;
         public Vector3Int ToWorldPos(Vector3Int chuckpos) => chuckpos + Position;
-        public bool IsotherChuckExistBlock(Vector3Int chuckpos) =>world!=null&&world.IsBlockExit(ToWorldPos(chuckpos));
+        public bool IsotherChuckExistBlock(Vector3Int chuckpos) =>world!=null&&world.IsBlockExist(ToWorldPos(chuckpos));
         public bool IsBlockExit(Vector3Int worldpos) => blocksContainer.Contain(ToChuckPos(worldpos));
         public bool IsInChuck(Vector3Int chuckpos)
         {
@@ -225,5 +226,12 @@ namespace WorldCreate.Chucks
             pendingRemove.Clear();
             return true;
         }
+        public ChuckJson GetChuckJson()
+        {
+            var buf = blocksContainer.GetChuckJson();
+            buf.id = pos;
+            return buf;
+        }
+       
     }
 }

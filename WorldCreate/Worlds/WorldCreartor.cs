@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
+namespace WorldCreate.Worlds
 
-namespace Assets.Scripts.WorldCreate
 {
     public class WorldCreartor : SingletonMono<WorldCreartor>
     {
-
-
+        private ChucksContainer chucksContainer;
         protected override void SingletonAwake()
         {
-            
+            chucksContainer = new ChucksContainer(1);
         }
+      
     }
 }

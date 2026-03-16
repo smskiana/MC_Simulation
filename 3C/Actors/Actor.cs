@@ -1,4 +1,3 @@
-using Actors;
 using Sirenix.OdinInspector;
 using StatSystems;
 using System;
@@ -53,7 +52,6 @@ namespace _3C.Actors
                     return Vector3.zero;
                 return (transform.position - DamageSource.position).normalized;
             } }
-
         public string Move { get => move;}
         public string Idle { get => idle; }
         public string Fall { get => fall;}

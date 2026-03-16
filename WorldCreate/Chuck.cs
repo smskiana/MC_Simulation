@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using WorldCreate.Chucks;
 
 namespace WorldCreatation
 {
@@ -114,7 +115,7 @@ namespace WorldCreatation
             space = new bool[WIDTH, HEIGHT, LENGTH];
         }
         /// <summary>
-        /// 初始化整个区块的方块 TODO :需要移除
+        /// 初始化整个区块的方块 TODO :需要修改
         /// </summary>
         public void InitBlock()
         {

@@ -1,8 +1,6 @@
-﻿
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace WorldCreatation
+namespace WorldCreate.Chucks
 {
     [RequireComponent(typeof(MeshCollider),typeof(MeshFilter),typeof(MeshRenderer))]
     public class ChunkView:MonoBehaviour

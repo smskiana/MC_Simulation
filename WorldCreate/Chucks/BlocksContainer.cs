@@ -126,6 +126,18 @@ namespace WorldCreate.Chucks
                 HandBlock(block);
             }
         }
+        public ChuckJson GetChuckJson()
+        {
+            ChuckJson chuckJson = new()
+            {
+                blocks = new()
+            };
+            foreach (var block in blocks)
+            {
+                chuckJson.blocks.Add(new(block.Key,block.Value.ID));
+            }
+            return chuckJson;
+        }
         public bool TryGetBlock(Vector3Int chuckPos, out Block block)=>blocks.TryGetValue(chuckPos, out block);
     }
 }
